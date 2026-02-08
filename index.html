@@ -25,7 +25,7 @@ body{
     100%{background-position:0% 50%;}
 }
 
-/* Floating Hearts */
+/* HEARTS */
 
 .bgHeart{
     position:fixed;
@@ -40,7 +40,7 @@ body{
     to{ transform:translateY(-10vh); }
 }
 
-/* Container */
+/* FADE */
 
 .container{
     padding:25px;
@@ -63,7 +63,7 @@ button{
     cursor:pointer;
 }
 
-/* KEEP YES VISIBLE */
+/* YES BASE POSITION */
 
 #yesBtn{
     position:fixed;
@@ -73,16 +73,27 @@ button{
     z-index:9999;
 }
 
-/* MEDIA FRAME */
+/* HEARTBEAT PULSE */
+
+@keyframes pulse{
+    0%{transform:translateX(-50%) scale(1);}
+    50%{transform:translateX(-50%) scale(1.08);}
+    100%{transform:translateX(-50%) scale(1);}
+}
+
+.pulse{
+    animation:pulse 0.8s infinite;
+    box-shadow:0 0 20px rgba(255,0,90,0.9);
+}
+
+/* FRAME */
 
 .frame{
     display:inline-block;
     padding:14px;
     background:linear-gradient(145deg,#fff,#ffd1dc);
     border-radius:20px;
-    box-shadow:
-        0 15px 35px rgba(0,0,0,0.4),
-        inset 0 0 10px rgba(255,255,255,0.8);
+    box-shadow:0 15px 35px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.8);
     border:6px solid #fff;
 }
 
@@ -91,14 +102,19 @@ button{
     max-width:85vw;
     max-height:60vh;
     border-radius:12px;
-    display:block;
 }
 
-/* Caption */
+/* TEXT */
 
 .caption{
     font-size:20px;
     margin-top:14px;
+}
+
+.note{
+    font-size:20px;
+    margin-top:20px;
+    padding:10px;
 }
 
 </style>
@@ -146,7 +162,7 @@ let music;
 let noClicks=0;
 let yesScale=1;
 
-/* START */
+/* Start */
 
 function start(){
     music=new Audio("music.mp3");
@@ -155,10 +171,9 @@ function start(){
     showMedia();
 }
 
-/* SLIDESHOW */
+/* Slideshow */
 
 function showMedia(){
-
     const item=media[index];
 
     let content=item.type==="image"
@@ -217,21 +232,31 @@ function dodgeNo(){
     btn.style.left=Math.random()*maxX+"px";
     btn.style.top=Math.random()*maxY+"px";
 
-    yesScale*=3;
+    /* 1.5x growth */
+    yesScale*=1.5;
     yesBtn.style.transform=`translateX(-50%) scale(${yesScale})`;
+
+    /* Activate pulse */
+    yesBtn.classList.add("pulse");
 }
 
 /* YES */
 
 function yes(){
+
     music.pause();
 
     confetti({particleCount:300,spread:130,origin:{y:0.6}});
 
     document.getElementById("app").innerHTML=`
         <img src="gif1.gif">
-        <h1>You just made me the happiest person ❤️</h1>
-        <p>I can't wait for our date 🙂</p>
+        <div class="note">
+        thank you for coming into my life and making it a beautiful place,
+        IK I am not all you always wished for and things don't turn out well when we want it to,
+        but the constant crush and the craing we have for each other makes us perfect,
+        I love you, you made me a bit perfect and always continue to make me perfect!
+        I LOVE YOU BUJJAMMALUUUUUU!
+        </div>
     `;
 }
 
