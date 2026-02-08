@@ -7,15 +7,22 @@
 
 <style>
 
-/* Animated Gradient Background */
+/* FAST SUNSET GRADIENT */
 
 body{
     margin:0;
     font-family:Arial;
     text-align:center;
-    background:linear-gradient(-45deg,#ff0033,#ff4d6d,#ff1a75,#ff6699);
+
+    background:linear-gradient(-45deg,
+        #ff5e13,   /* sunset orange */
+        #ff0033,   /* red */
+        #ff2d75,   /* pink */
+        #ff5e13
+    );
+
     background-size:400% 400%;
-    animation:gradientShift 8s ease infinite;
+    animation:gradientShift 1s linear infinite;
     overflow-x:hidden;
 }
 
@@ -25,13 +32,20 @@ body{
     100%{background-position:0% 50%;}
 }
 
-/* Floating Hearts */
+
+/* Floating hearts with black outline */
 
 .bgHeart{
     position:fixed;
     font-size:18px;
-    opacity:0.25;
+    opacity:0.35;
     animation:bgFloat linear infinite;
+
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
 }
 
 @keyframes bgFloat{
@@ -97,15 +111,16 @@ img, video{
 
 <script>
 
-/* Floating background hearts */
+/* Floating hearts generator */
+
 function createBackgroundHearts(){
     for(let i=0;i<25;i++){
         const h=document.createElement("div");
         h.className="bgHeart";
         h.innerHTML="❤️";
         h.style.left=Math.random()*100+"vw";
-        h.style.animationDuration=(6+Math.random()*6)+"s";
-        h.style.fontSize=(14+Math.random()*12)+"px";
+        h.style.animationDuration=(5+Math.random()*5)+"s";
+        h.style.fontSize=(16+Math.random()*14)+"px";
         document.body.appendChild(h);
     }
 }
@@ -135,7 +150,7 @@ function start(){
     showMedia();
 }
 
-/* Show media */
+/* Media display */
 
 function showMedia(){
     const item=media[index];
@@ -164,7 +179,7 @@ function next(){
     }
 }
 
-/* Question screen (GIF2) */
+/* Question screen */
 
 function question(){
     document.getElementById("app").innerHTML=`
@@ -175,7 +190,7 @@ function question(){
     `;
 }
 
-/* NO button behavior */
+/* NO click */
 
 function dodgeNo(){
 
@@ -202,12 +217,11 @@ function dodgeNo(){
     btn.style.left=Math.random()*maxX+"px";
     btn.style.top=Math.random()*maxY+"px";
 
-    /* YES grows 3x */
     yesScale *= 3;
     yesBtn.style.transform=`scale(${yesScale})`;
 }
 
-/* YES click (GIF1) */
+/* YES click */
 
 function yes(){
 
@@ -227,6 +241,5 @@ function yes(){
 }
 
 </script>
-
 </body>
 </html>
