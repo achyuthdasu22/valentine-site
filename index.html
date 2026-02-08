@@ -1,58 +1,180 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hey Bujjammaluuuuuu ❤️</title>
+<meta charset="UTF-8">
+<title>For You ❤️</title>
 
 <style>
 body{
-  text-align:center;
-  font-family:Arial;
-  background:#ffe6f0;
+    margin:0;
+    text-align:center;
+    font-family:Arial;
+    background:#ffe6f0;
+}
+
+.container{
+    padding:30px;
 }
 
 button{
-  padding:15px 25px;
-  font-size:20px;
-  margin:15px;
+    padding:15px 25px;
+    font-size:20px;
+    margin:15px;
+    cursor:pointer;
+}
+
+img, video{
+    max-width:80%;
+    max-height:60vh;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.2);
+}
+
+.caption{
+    font-size:20px;
+    margin-top:15px;
+}
+
+#noBtn{
+    transition:left 0.2s, top 0.2s;
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<h1>Hey bujjammalu❤️</h1>
-<p>I made something just for you...</p>
+<div class="container" id="app">
 
+<h1>Hey Bujjammaluuuu❤️</h1>
+<p>I made something just for you...</p>
 <button onclick="start()">Start</button>
+
+</div>
 
 <script>
 
+// ==========================
+// MEDIA DATA — EDIT CAPTIONS HERE
+// ==========================
+
+const media = [
+  {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
+  {type:"image", src:"photo2.jpg", caption:"The day we kissed for the first time!"},
+  {type:"video", src:"video1.mp4", caption:"I love when you yap!"},
+  {type:"image", src:"photo3.jpg", caption:"My favourite photo of yours lol!"},
+  {type:"video", src:"video2.mp4", caption:"first time we ever held hands and walked!"},
+  {type:"image", src:"photo4.jpg", caption:"First temple visit together! Also gundu me hehehehehehhe"}
+];
+
+let index = 0;
+let music;
+
+// ==========================
+// START SLIDESHOW
+// ==========================
+
 function start(){
-document.body.innerHTML = `
-<h1>Some of my favourite memories</h1>
-<img src="photo1.jpg" width="300"><br><br>
-<img src="photo2.jpg" width="300"><br><br>
-<button onclick="question()">Next</button>
-`;
+
+    music = new Audio("music.mp3");
+    music.loop = true;
+    music.play();
+
+    showMedia();
 }
+
+function showMedia(){
+
+    let item = media[index];
+
+    let content = "";
+
+    if(item.type === "image"){
+        content = `<img src="${item.src}">`;
+    } else {
+        content = `<video controls autoplay>
+                      <source src="${item.src}" type="video/mp4">
+                   </video>`;
+    }
+
+    document.getElementById("app").innerHTML = `
+        ${content}
+        <div class="caption">${item.caption}</div>
+        <button onclick="next()">Next ❤️</button>
+    `;
+}
+
+function next(){
+    index++;
+
+    if(index < media.length){
+        showMedia();
+    } else {
+        question();
+    }
+}
+
+// ==========================
+// VALENTINE QUESTION
+// ==========================
 
 function question(){
-document.body.innerHTML = `
-<h1>Will you be my Valentine? ❤️</h1>
-<button onclick="yes()">Yes</button>
-<button id="noBtn" onmouseover="move()">No</button>
-`;
+
+    document.getElementById("app").innerHTML = `
+        <h1>Will you be my Valentine? ❤️</h1>
+        <button onclick="yes()">Yes</button>
+        <button id="noBtn">No</button>
+    `;
+
+    runAwayButton();
 }
+
+// ==========================
+// RUNAWAY BUTTON LOGIC
+// ==========================
+
+function runAwayButton(){
+
+    const noBtn = document.getElementById("noBtn");
+
+    document.addEventListener("mousemove", function(e){
+
+        const rect = noBtn.getBoundingClientRect();
+
+        const btnX = rect.left + rect.width/2;
+        const btnY = rect.top + rect.height/2;
+
+        const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
+
+        if(distance < 120){
+
+            const maxX = window.innerWidth - rect.width;
+            const maxY = window.innerHeight - rect.height;
+
+            noBtn.style.position="fixed";
+            noBtn.style.left = Math.random()*maxX + "px";
+            noBtn.style.top = Math.random()*maxY + "px";
+        }
+    });
+}
+
+// ==========================
+// YES CLICKED
+// ==========================
 
 function yes(){
-document.body.innerHTML = "<h1>You just made me the happiest person ❤️</h1>";
-}
 
-function move(){
-let b=document.getElementById("noBtn");
-b.style.position="absolute";
-b.style.left=Math.random()*80+"%";
-b.style.top=Math.random()*80+"%";
+    music.pause();
+
+
+
+
+function yes(){
+  confetti();
+  document.body.innerHTML="<h1>You just made me the happiest person ❤️</h1>";
+}
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <p>I can't wait for our date 🙂</p>
+    `;
 }
 
 </script>
