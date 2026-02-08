@@ -40,60 +40,53 @@ img, video{
 }
 </style>
 
+<!-- Confetti Library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 </head>
 <body>
 
 <div class="container" id="app">
-
 <h1>Hey Bujjammaluuuu❤️</h1>
 <p>I made something just for you...</p>
 <button onclick="start()">Start</button>
-
 </div>
 
 <script>
 
-// ==========================
-// MEDIA DATA — EDIT CAPTIONS HERE
-// ==========================
-
+// MEDIA LIST
 const media = [
   {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
   {type:"image", src:"photo2.jpg", caption:"The day we kissed for the first time!"},
   {type:"video", src:"video1.mp4", caption:"I love when you yap!"},
   {type:"image", src:"photo3.jpg", caption:"My favourite photo of yours lol!"},
-  {type:"video", src:"video2.mp4", caption:"first time we ever held hands and walked!"},
-  {type:"image", src:"photo4.jpg", caption:"First temple visit together! Also gundu me hehehehehehhe"}
+  {type:"video", src:"video2.mp4", caption:"First time we ever held hands and walked!"},
+  {type:"image", src:"photo4.jpg", caption:"First temple visit together! Also gundu me 😄"}
 ];
 
 let index = 0;
 let music;
 
-// ==========================
-// START SLIDESHOW
-// ==========================
-
+// START
 function start(){
-
     music = new Audio("music.mp3");
     music.loop = true;
     music.play();
-
     showMedia();
 }
 
+// SHOW MEDIA
 function showMedia(){
-
     let item = media[index];
-
     let content = "";
 
     if(item.type === "image"){
         content = `<img src="${item.src}">`;
     } else {
-        content = `<video controls autoplay>
-                      <source src="${item.src}" type="video/mp4">
-                   </video>`;
+        content = `
+            <video controls autoplay>
+                <source src="${item.src}" type="video/mp4">
+            </video>`;
     }
 
     document.getElementById("app").innerHTML = `
@@ -103,9 +96,9 @@ function showMedia(){
     `;
 }
 
+// NEXT
 function next(){
     index++;
-
     if(index < media.length){
         showMedia();
     } else {
@@ -113,40 +106,29 @@ function next(){
     }
 }
 
-// ==========================
-// VALENTINE QUESTION
-// ==========================
-
+// QUESTION
 function question(){
-
     document.getElementById("app").innerHTML = `
         <h1>Will you be my Valentine? ❤️</h1>
         <button onclick="yes()">Yes</button>
         <button id="noBtn">No</button>
     `;
-
     runAwayButton();
 }
 
-// ==========================
-// RUNAWAY BUTTON LOGIC
-// ==========================
-
+// RUNAWAY BUTTON
 function runAwayButton(){
-
     const noBtn = document.getElementById("noBtn");
 
     document.addEventListener("mousemove", function(e){
 
         const rect = noBtn.getBoundingClientRect();
-
         const btnX = rect.left + rect.width/2;
         const btnY = rect.top + rect.height/2;
 
         const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
 
         if(distance < 120){
-
             const maxX = window.innerWidth - rect.width;
             const maxY = window.innerHeight - rect.height;
 
@@ -157,22 +139,12 @@ function runAwayButton(){
     });
 }
 
-// ==========================
-// YES CLICKED
-// ==========================
-
+// YES CLICK
 function yes(){
-
     music.pause();
-
-
-
-
-function yes(){
-  confetti();
-  document.body.innerHTML="<h1>You just made me the happiest person ❤️</h1>";
-}
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    confetti();
+    document.getElementById("app").innerHTML = `
+        <h1>You just made me the happiest person ❤️</h1>
         <p>I can't wait for our date 🙂</p>
     `;
 }
