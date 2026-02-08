@@ -8,14 +8,22 @@
 
 <style>
 
-/* Background gradient */
+/* ===== Animated Gradient Background ===== */
 
 body{
     margin:0;
     font-family:Arial;
     text-align:center;
-    background:linear-gradient(135deg,#ffd1dc,#ffe6f0,#fff0f5);
+    background:linear-gradient(-45deg,#ff0033,#ff4d6d,#ff1a75,#ff6699);
+    background-size:400% 400%;
+    animation:gradientShift 8s ease infinite;
     overflow-x:hidden;
+}
+
+@keyframes gradientShift{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
 }
 
 /* Floating background hearts */
@@ -32,7 +40,7 @@ body{
     to{ transform:translateY(-10vh); }
 }
 
-/* Container + fade transitions */
+/* Fade transitions */
 
 .container{
     padding:25px;
@@ -61,7 +69,7 @@ button:hover{
     box-shadow:0 6px 16px rgba(0,0,0,0.2);
 }
 
-/* Media */
+/* Media styling */
 
 img, video{
     max-width:90%;
@@ -90,7 +98,7 @@ img, video{
 
 <script>
 
-/* ---------- Floating Background Hearts ---------- */
+/* ===== Floating Hearts ===== */
 
 function createBackgroundHearts(){
     for(let i=0;i<25;i++){
@@ -105,8 +113,7 @@ function createBackgroundHearts(){
 }
 createBackgroundHearts();
 
-
-/* ---------- Media ---------- */
+/* ===== Media ===== */
 
 const media=[
   {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
@@ -119,9 +126,9 @@ const media=[
 let index=0;
 let music;
 let noClicks=0;
-let yesSize=18;
+let yesScale=1;
 
-/* ---------- Start ---------- */
+/* ===== Start ===== */
 
 function start(){
     music=new Audio("music.mp3");
@@ -130,16 +137,16 @@ function start(){
     showMedia();
 }
 
-/* ---------- Media display ---------- */
+/* ===== Show Media ===== */
 
 function showMedia(){
     const item=media[index];
 
-    let content=item.type==="image"
-        ? `<img src="${item.src}">`
-        : `<video controls playsinline autoplay>
-             <source src="${item.src}" type="video/mp4">
-           </video>`;
+    const content=item.type==="image"
+      ? `<img src="${item.src}">`
+      : `<video controls playsinline autoplay>
+           <source src="${item.src}" type="video/mp4">
+         </video>`;
 
     document.getElementById("app").innerHTML=`
         ${content}
@@ -148,7 +155,7 @@ function showMedia(){
     `;
 }
 
-/* ---------- Next ---------- */
+/* ===== Next ===== */
 
 function next(){
     index++;
@@ -159,7 +166,7 @@ function next(){
     }
 }
 
-/* ---------- Question ---------- */
+/* ===== Question ===== */
 
 function question(){
     document.getElementById("app").innerHTML=`
@@ -170,7 +177,7 @@ function question(){
     `;
 }
 
-/* ---------- No Button ---------- */
+/* ===== No Button ===== */
 
 function dodgeNo(){
 
@@ -182,15 +189,15 @@ function dodgeNo(){
     const responses=[
         "No","Are you sure?","Really sure?","Think again 😜",
         "Last chance!","Just press Yes ❤️","Nope 😏","Still no?",
-        "You’re persistent!","Destiny says YES","Come on now…",
-        "You know the answer 😉","Error 404: No not found",
-        "Nice try 😄","Just tap YES ❤️"
+        "Destiny says YES","Come on now…","You know the answer 😉",
+        "Error 404: No not found","Nice try 😄","Just tap YES ❤️"
     ];
 
     if(noClicks<responses.length){
         btn.innerText=responses[noClicks];
     }
 
+    /* Move NO button */
     const maxX=window.innerWidth-btn.offsetWidth;
     const maxY=window.innerHeight-btn.offsetHeight;
 
@@ -198,16 +205,17 @@ function dodgeNo(){
     btn.style.left=Math.random()*maxX+"px";
     btn.style.top=Math.random()*maxY+"px";
 
-    yesSize+=6;
-    yesBtn.style.fontSize=yesSize+"px";
+    /* MASSIVE YES growth */
+    yesScale *= 1.7;     // ← MUCH stronger scaling
+    yesBtn.style.transform=`scale(${yesScale})`;
 }
 
-/* ---------- YES ---------- */
+/* ===== YES ===== */
 
 function yes(){
     music.pause();
 
-    confetti({particleCount:250, spread:120, origin:{y:0.6}});
+    confetti({particleCount:300, spread:130, origin:{y:0.6}});
 
     document.getElementById("app").innerHTML=`
         <img src="gif2.gif">
