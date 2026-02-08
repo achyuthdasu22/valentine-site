@@ -3,55 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>For You ❤️</title>
 
 <style>
+
+/* Background gradient */
+
 body{
     margin:0;
-    text-align:center;
     font-family:Arial;
-    background:#ffe6f0;
+    text-align:center;
+    background:linear-gradient(135deg,#ffd1dc,#ffe6f0,#fff0f5);
     overflow-x:hidden;
 }
 
-.container{
-    padding:25px;
+/* Floating background hearts */
+
+.bgHeart{
+    position:fixed;
+    font-size:18px;
+    opacity:0.25;
+    animation:bgFloat linear infinite;
 }
 
+@keyframes bgFloat{
+    from{ transform:translateY(100vh); }
+    to{ transform:translateY(-10vh); }
+}
+
+/* Container + fade transitions */
+
+.container{
+    padding:25px;
+    animation:fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* Buttons */
+
 button{
-    padding:15px 25px;
+    padding:15px 28px;
     font-size:18px;
     margin:15px;
-    cursor:pointer;
-    border-radius:10px;
+    border-radius:12px;
     border:none;
+    cursor:pointer;
+    transition:transform 0.2s, box-shadow 0.2s;
 }
+
+button:hover{
+    transform:scale(1.08);
+    box-shadow:0 6px 16px rgba(0,0,0,0.2);
+}
+
+/* Media */
 
 img, video{
     max-width:90%;
     max-height:60vh;
-    border-radius:15px;
-    box-shadow:0 0 20px rgba(0,0,0,0.2);
+    border-radius:18px;
+    box-shadow:0 0 25px rgba(0,0,0,0.25);
 }
 
 .caption{
-    font-size:19px;
-    margin-top:15px;
-}
-
-.heart{
-    position:fixed;
-    bottom:-20px;
     font-size:20px;
-    animation:floatUp linear forwards;
+    margin-top:12px;
 }
 
-@keyframes floatUp{
-    to{
-        transform:translateY(-110vh);
-        opacity:0;
-    }
-}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -67,6 +90,24 @@ img, video{
 
 <script>
 
+/* ---------- Floating Background Hearts ---------- */
+
+function createBackgroundHearts(){
+    for(let i=0;i<25;i++){
+        const h=document.createElement("div");
+        h.className="bgHeart";
+        h.innerHTML="❤️";
+        h.style.left=Math.random()*100+"vw";
+        h.style.animationDuration=(6+Math.random()*6)+"s";
+        h.style.fontSize=(14+Math.random()*12)+"px";
+        document.body.appendChild(h);
+    }
+}
+createBackgroundHearts();
+
+
+/* ---------- Media ---------- */
+
 const media=[
   {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
   {type:"image", src:"photo2.jpg", caption:"The day we kissed for the first time!"},
@@ -80,26 +121,25 @@ let music;
 let noClicks=0;
 let yesSize=18;
 
-// START
+/* ---------- Start ---------- */
+
 function start(){
     music=new Audio("music.mp3");
     music.loop=true;
-    music.play().catch(()=>{}); // prevents iPhone warning
+    music.play().catch(()=>{});
     showMedia();
 }
 
-// SHOW MEDIA
+/* ---------- Media display ---------- */
+
 function showMedia(){
     const item=media[index];
-    let content="";
 
-    if(item.type==="image"){
-        content=`<img src="${item.src}">`;
-    }else{
-        content=`<video controls playsinline autoplay>
-                   <source src="${item.src}" type="video/mp4">
-                 </video>`;
-    }
+    let content=item.type==="image"
+        ? `<img src="${item.src}">`
+        : `<video controls playsinline autoplay>
+             <source src="${item.src}" type="video/mp4">
+           </video>`;
 
     document.getElementById("app").innerHTML=`
         ${content}
@@ -108,43 +148,30 @@ function showMedia(){
     `;
 }
 
-// NEXT
+/* ---------- Next ---------- */
+
 function next(){
     index++;
     if(index<media.length){
         showMedia();
-    }else{
+    } else {
         question();
     }
 }
 
-// HEARTS
-function spawnHearts(){
-    setInterval(()=>{
-        const heart=document.createElement("div");
-        heart.className="heart";
-        heart.innerHTML="❤️";
-        heart.style.left=Math.random()*100+"vw";
-        heart.style.animationDuration=(3+Math.random()*3)+"s";
-        document.body.appendChild(heart);
-        setTimeout(()=>heart.remove(),6000);
-    },300);
-}
+/* ---------- Question ---------- */
 
-// QUESTION
 function question(){
-
     document.getElementById("app").innerHTML=`
         <img src="gif1.gif">
         <h1>Will you be my Valentine? ❤️</h1>
         <button id="yesBtn" onclick="yes()">Yes</button>
         <button id="noBtn" onclick="dodgeNo()">No</button>
     `;
-
-    spawnHearts();
 }
 
-// NO CLICK
+/* ---------- No Button ---------- */
+
 function dodgeNo(){
 
     noClicks++;
@@ -153,30 +180,14 @@ function dodgeNo(){
     const yesBtn=document.getElementById("yesBtn");
 
     const responses=[
-        "No",
-        "Are you sure?",
-        "Really sure?",
-        "Think again 😜",
-        "Last chance!",
-        "Just press Yes ❤️",
-        "Nope 😏",
-        "Still no?",
-        "You’re persistent!",
-        "This button disagrees",
-        "Try again 😂",
-        "Destiny says YES",
-        "Come on now…",
-        "You know the answer 😉",
-        "System recommends YES",
-        "Error 404: No not found",
-        "Nice try 😄",
-        "This isn’t working",
-        "Just tap YES already ❤️",
-        "I'll keep running!",
-        "You can’t catch me!"
+        "No","Are you sure?","Really sure?","Think again 😜",
+        "Last chance!","Just press Yes ❤️","Nope 😏","Still no?",
+        "You’re persistent!","Destiny says YES","Come on now…",
+        "You know the answer 😉","Error 404: No not found",
+        "Nice try 😄","Just tap YES ❤️"
     ];
 
-    if(noClicks < responses.length){
+    if(noClicks<responses.length){
         btn.innerText=responses[noClicks];
     }
 
@@ -191,16 +202,12 @@ function dodgeNo(){
     yesBtn.style.fontSize=yesSize+"px";
 }
 
-// YES
-function yes(){
+/* ---------- YES ---------- */
 
+function yes(){
     music.pause();
 
-    confetti({
-        particleCount:250,
-        spread:120,
-        origin:{y:0.6}
-    });
+    confetti({particleCount:250, spread:120, origin:{y:0.6}});
 
     document.getElementById("app").innerHTML=`
         <img src="gif2.gif">
@@ -210,6 +217,5 @@ function yes(){
 }
 
 </script>
-
 </body>
 </html>
