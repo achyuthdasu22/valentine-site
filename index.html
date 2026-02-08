@@ -2,41 +2,45 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>For You ❤️</title>
 
 <style>
 body{
     margin:0;
     text-align:center;
-    font-family:Arial;
+    font-family:Arial, Helvetica, sans-serif;
     background:#ffe6f0;
 }
 
 .container{
-    padding:30px;
+    padding:25px;
 }
 
 button{
     padding:15px 25px;
-    font-size:20px;
+    font-size:18px;
     margin:15px;
     cursor:pointer;
+    border-radius:10px;
+    border:none;
 }
 
 img, video{
-    max-width:80%;
+    max-width:90%;
     max-height:60vh;
     border-radius:15px;
     box-shadow:0 0 20px rgba(0,0,0,0.2);
 }
 
 .caption{
-    font-size:20px;
+    font-size:19px;
     margin-top:15px;
 }
 
 #noBtn{
-    transition:left 0.2s, top 0.2s;
+    transition:left 0.15s, top 0.15s;
 }
 </style>
 
@@ -54,7 +58,9 @@ img, video{
 
 <script>
 
-// MEDIA LIST
+// ================= MEDIA DATA =================
+// EDIT ONLY CAPTIONS IF YOU WANT
+
 const media = [
   {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
   {type:"image", src:"photo2.jpg", caption:"The day we kissed for the first time!"},
@@ -66,16 +72,19 @@ const media = [
 
 let index = 0;
 let music;
+let noClicks = 0;
 
-// START
+// ================= START =================
+
 function start(){
     music = new Audio("music.mp3");
     music.loop = true;
-    music.play();
+    music.play();   // iPhone allowed (user interaction)
     showMedia();
 }
 
-// SHOW MEDIA
+// ================= SHOW MEDIA =================
+
 function showMedia(){
     let item = media[index];
     let content = "";
@@ -84,7 +93,7 @@ function showMedia(){
         content = `<img src="${item.src}">`;
     } else {
         content = `
-            <video controls autoplay>
+            <video controls playsinline autoplay>
                 <source src="${item.src}" type="video/mp4">
             </video>`;
     }
@@ -96,7 +105,8 @@ function showMedia(){
     `;
 }
 
-// NEXT
+// ================= NEXT =================
+
 function next(){
     index++;
     if(index < media.length){
@@ -106,43 +116,56 @@ function next(){
     }
 }
 
-// QUESTION
+// ================= QUESTION =================
+
 function question(){
     document.getElementById("app").innerHTML = `
         <h1>Will you be my Valentine? ❤️</h1>
         <button onclick="yes()">Yes</button>
-        <button id="noBtn">No</button>
+        <button id="noBtn" onclick="dodgeNo()">No</button>
     `;
-    runAwayButton();
 }
 
-// RUNAWAY BUTTON
-function runAwayButton(){
-    const noBtn = document.getElementById("noBtn");
+// ================= MOBILE SAFE DODGE =================
 
-    document.addEventListener("mousemove", function(e){
+function dodgeNo(){
 
-        const rect = noBtn.getBoundingClientRect();
-        const btnX = rect.left + rect.width/2;
-        const btnY = rect.top + rect.height/2;
+    const btn = document.getElementById("noBtn");
 
-        const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
+    const responses = [
+        "No",
+        "Are you sure?",
+        "Really sure?",
+        "Think again 😜",
+        "Last chance!",
+        "Just press Yes ❤️"
+    ];
 
-        if(distance < 120){
-            const maxX = window.innerWidth - rect.width;
-            const maxY = window.innerHeight - rect.height;
+    if(noClicks < responses.length-1){
+        noClicks++;
+        btn.innerText = responses[noClicks];
+    }
 
-            noBtn.style.position="fixed";
-            noBtn.style.left = Math.random()*maxX + "px";
-            noBtn.style.top = Math.random()*maxY + "px";
-        }
-    });
+    const maxX = window.innerWidth - btn.offsetWidth;
+    const maxY = window.innerHeight - btn.offsetHeight;
+
+    btn.style.position = "fixed";
+    btn.style.left = Math.random()*maxX + "px";
+    btn.style.top = Math.random()*maxY + "px";
 }
 
-// YES CLICK
+// ================= YES =================
+
 function yes(){
     music.pause();
-    confetti();
+
+    // Confetti burst
+    confetti({
+        particleCount: 200,
+        spread: 100,
+        origin: { y: 0.6 }
+    });
+
     document.getElementById("app").innerHTML = `
         <h1>You just made me the happiest person ❤️</h1>
         <p>I can't wait for our date 🙂</p>
