@@ -7,20 +7,13 @@
 
 <style>
 
-/* FAST SUNSET GRADIENT */
+/* Fast sunset gradient */
 
 body{
     margin:0;
     font-family:Arial;
     text-align:center;
-
-    background:linear-gradient(-45deg,
-        #ff5e13,   /* sunset orange */
-        #ff0033,   /* red */
-        #ff2d75,   /* pink */
-        #ff5e13
-    );
-
+    background:linear-gradient(-45deg,#ff5e13,#ff0033,#ff2d75,#ff5e13);
     background-size:400% 400%;
     animation:gradientShift 1s linear infinite;
     overflow-x:hidden;
@@ -32,20 +25,14 @@ body{
     100%{background-position:0% 50%;}
 }
 
-
-/* Floating hearts with black outline */
+/* Hearts */
 
 .bgHeart{
     position:fixed;
     font-size:18px;
     opacity:0.35;
     animation:bgFloat linear infinite;
-
-    text-shadow:
-        -1px -1px 0 black,
-         1px -1px 0 black,
-        -1px  1px 0 black,
-         1px  1px 0 black;
+    text-shadow:-1px -1px 0 black,1px -1px 0 black,-1px 1px 0 black,1px 1px 0 black;
 }
 
 @keyframes bgFloat{
@@ -53,7 +40,7 @@ body{
     to{ transform:translateY(-10vh); }
 }
 
-/* Fade container */
+/* Container */
 
 .container{
     padding:25px;
@@ -74,12 +61,16 @@ button{
     border-radius:12px;
     border:none;
     cursor:pointer;
-    transition:transform 0.2s, box-shadow 0.2s;
 }
 
-button:hover{
-    transform:scale(1.08);
-    box-shadow:0 6px 16px rgba(0,0,0,0.2);
+/* Keep YES centered and visible */
+
+#yesBtn{
+    position:fixed;
+    left:50%;
+    bottom:10%;
+    transform:translateX(-50%);
+    z-index:9999;
 }
 
 /* Media */
@@ -111,8 +102,7 @@ img, video{
 
 <script>
 
-/* Floating hearts generator */
-
+/* Hearts */
 function createBackgroundHearts(){
     for(let i=0;i<25;i++){
         const h=document.createElement("div");
@@ -138,6 +128,7 @@ const media=[
 
 let index=0;
 let music;
+let timer;
 let noClicks=0;
 let yesScale=1;
 
@@ -150,27 +141,30 @@ function start(){
     showMedia();
 }
 
-/* Media display */
+/* Slideshow */
 
 function showMedia(){
     const item=media[index];
 
-    const content=item.type==="image"
+    let content=item.type==="image"
         ? `<img src="${item.src}">`
-        : `<video controls playsinline autoplay>
+        : `<video id="slideVid" controls autoplay playsinline>
              <source src="${item.src}" type="video/mp4">
            </video>`;
 
     document.getElementById("app").innerHTML=`
         ${content}
         <div class="caption">${item.caption}</div>
-        <button onclick="next()">Next ❤️</button>
     `;
+
+    if(item.type==="image"){
+        timer=setTimeout(nextSlide,3500);
+    } else {
+        document.getElementById("slideVid").onended=nextSlide;
+    }
 }
 
-/* Next */
-
-function next(){
+function nextSlide(){
     index++;
     if(index<media.length){
         showMedia();
@@ -179,7 +173,7 @@ function next(){
     }
 }
 
-/* Question screen */
+/* Question */
 
 function question(){
     document.getElementById("app").innerHTML=`
@@ -206,8 +200,8 @@ function dodgeNo(){
         "Error 404: No not found","Nice try 😄","Just tap YES ❤️"
     ];
 
-    if(noClicks < responses.length){
-        btn.innerText = responses[noClicks];
+    if(noClicks<responses.length){
+        btn.innerText=responses[noClicks];
     }
 
     const maxX=window.innerWidth-btn.offsetWidth;
@@ -217,21 +211,16 @@ function dodgeNo(){
     btn.style.left=Math.random()*maxX+"px";
     btn.style.top=Math.random()*maxY+"px";
 
-    yesScale *= 3;
-    yesBtn.style.transform=`scale(${yesScale})`;
+    yesScale*=3;
+    yesBtn.style.transform=`translateX(-50%) scale(${yesScale})`;
 }
 
-/* YES click */
+/* YES */
 
 function yes(){
-
     music.pause();
 
-    confetti({
-        particleCount:300,
-        spread:130,
-        origin:{y:0.6}
-    });
+    confetti({particleCount:300,spread:130,origin:{y:0.6}});
 
     document.getElementById("app").innerHTML=`
         <img src="gif1.gif">
