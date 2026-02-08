@@ -6,9 +6,6 @@
 <title>For You ❤️</title>
 
 <style>
-
-/* FAST SUNSET GRADIENT */
-
 body{
     margin:0;
     font-family:Arial;
@@ -18,15 +15,13 @@ body{
     animation:gradientShift 1s linear infinite;
     overflow-x:hidden;
 }
-
 @keyframes gradientShift{
     0%{background-position:0% 50%;}
     50%{background-position:100% 50%;}
     100%{background-position:0% 50%;}
 }
 
-/* HEARTS */
-
+/* Hearts */
 .bgHeart{
     position:fixed;
     font-size:18px;
@@ -34,26 +29,22 @@ body{
     animation:bgFloat linear infinite;
     text-shadow:-1px -1px 0 black,1px -1px 0 black,-1px 1px 0 black,1px 1px 0 black;
 }
-
 @keyframes bgFloat{
     from{ transform:translateY(100vh); }
     to{ transform:translateY(-10vh); }
 }
 
-/* FADE */
-
+/* Fade */
 .container{
     padding:25px;
     animation:fadeIn 0.8s ease;
 }
-
 @keyframes fadeIn{
     from{opacity:0; transform:translateY(20px);}
     to{opacity:1; transform:translateY(0);}
 }
 
-/* BUTTON */
-
+/* Buttons */
 button{
     padding:15px 28px;
     font-size:18px;
@@ -63,8 +54,7 @@ button{
     cursor:pointer;
 }
 
-/* YES BASE POSITION */
-
+/* YES anchored */
 #yesBtn{
     position:fixed;
     left:50%;
@@ -73,21 +63,18 @@ button{
     z-index:9999;
 }
 
-/* HEARTBEAT PULSE */
-
+/* Pulse animation */
 @keyframes pulse{
     0%{transform:translateX(-50%) scale(1);}
     50%{transform:translateX(-50%) scale(1.08);}
     100%{transform:translateX(-50%) scale(1);}
 }
-
 .pulse{
     animation:pulse 0.8s infinite;
     box-shadow:0 0 20px rgba(255,0,90,0.9);
 }
 
-/* FRAME */
-
+/* Frame */
 .frame{
     display:inline-block;
     padding:14px;
@@ -96,7 +83,6 @@ button{
     box-shadow:0 15px 35px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.8);
     border:6px solid #fff;
 }
-
 .frame img,
 .frame video{
     max-width:85vw;
@@ -104,23 +90,14 @@ button{
     border-radius:12px;
 }
 
-/* TEXT */
-
-.caption{
-    font-size:20px;
-    margin-top:14px;
-}
-
-.note{
-    font-size:20px;
-    margin-top:20px;
-    padding:10px;
-}
+/* Text */
+.caption{font-size:20px;margin-top:14px;}
+.note{font-size:20px;margin-top:20px;padding:10px;}
+.noMsg{font-size:18px;color:white;margin-top:10px;}
 
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
 </head>
 <body>
 
@@ -133,7 +110,6 @@ button{
 <script>
 
 /* Hearts */
-
 function createBackgroundHearts(){
     for(let i=0;i<25;i++){
         const h=document.createElement("div");
@@ -148,7 +124,6 @@ function createBackgroundHearts(){
 createBackgroundHearts();
 
 /* Media */
-
 const media=[
   {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
   {type:"image", src:"photo2.jpg", caption:"The day we kissed for the first time!"},
@@ -163,7 +138,6 @@ let noClicks=0;
 let yesScale=1;
 
 /* Start */
-
 function start(){
     music=new Audio("music.mp3");
     music.loop=true;
@@ -172,7 +146,6 @@ function start(){
 }
 
 /* Slideshow */
-
 function showMedia(){
     const item=media[index];
 
@@ -205,61 +178,28 @@ function nextSlide(){
     }
 }
 
-/* QUESTION */
+/* Messages for NO */
+const responses=[
+"Are you sure?","Really sure?","Think again 😜","Last chance!",
+"Just press Yes ❤️","Nope 😏","Still no?","You’re persistent!",
+"This button disagrees","Try again 😂","Destiny says YES",
+"Come on now…","You know the answer 😉","System recommends YES",
+"Error 404: No not found","Nice try 😄","This isn’t working",
+"Just tap YES already ❤️","I'll keep running!","You can’t catch me!"
+];
 
+/* Question */
 function question(){
     document.getElementById("app").innerHTML=`
         <img src="gif2.gif">
         <h1>Will you be my Valentine? ❤️</h1>
+        <div id="noText" class="noMsg"></div>
         <button id="yesBtn" onclick="yes()">Yes</button>
         <button id="noBtn" onclick="dodgeNo()">No</button>
     `;
 }
 
-/* NO CLICK */
-
+/* NO click */
 function dodgeNo(){
-
-    noClicks++;
-
     const btn=document.getElementById("noBtn");
-    const yesBtn=document.getElementById("yesBtn");
-
-    const maxX=window.innerWidth-btn.offsetWidth;
-    const maxY=window.innerHeight-btn.offsetHeight;
-
-    btn.style.position="fixed";
-    btn.style.left=Math.random()*maxX+"px";
-    btn.style.top=Math.random()*maxY+"px";
-
-    /* 1.5x growth */
-    yesScale*=1.5;
-    yesBtn.style.transform=`translateX(-50%) scale(${yesScale})`;
-
-    /* Activate pulse */
-    yesBtn.classList.add("pulse");
-}
-
-/* YES */
-
-function yes(){
-
-    music.pause();
-
-    confetti({particleCount:300,spread:130,origin:{y:0.6}});
-
-    document.getElementById("app").innerHTML=`
-        <img src="gif1.gif">
-        <div class="note">
-        Thank you for coming into my life and making it a beautiful place,
-        IK I am not all you always wished for and things don't turn out well when we want it to,
-        but we never left each other nor gave up that's the exact reason why we are perfect for each other!
-        you made me a bit perfect and always continue to make me perfect from my previous self!
-        I LOVE YOU BUJJAMMALUUUUUU!
-        </div>
-    `;
-}
-
-</script>
-</body>
-</html>
+    const yesBtn=d
