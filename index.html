@@ -39,8 +39,6 @@ img, video{
     margin-top:15px;
 }
 
-/* Floating hearts animation */
-
 .heart{
     position:fixed;
     bottom:-20px;
@@ -54,7 +52,6 @@ img, video{
         opacity:0;
     }
 }
-
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -70,11 +67,10 @@ img, video{
 
 <script>
 
-// MEDIA
-const media = [
+const media=[
   {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
   {type:"image", src:"photo2.jpg", caption:"The day we kissed for the first time!"},
-  {type:"video", src:"video1.mp4", caption:"first time you held my hand!"},
+  {type:"video", src:"video1.mp4", caption:"First time you held my hand!"},
   {type:"image", src:"photo3.jpg", caption:"My favourite photo of yours lol!"},
   {type:"image", src:"photo4.jpg", caption:"First temple visit together!"}
 ];
@@ -88,13 +84,13 @@ let yesSize=18;
 function start(){
     music=new Audio("music.mp3");
     music.loop=true;
-    music.play();
+    music.play().catch(()=>{}); // prevents iPhone warning
     showMedia();
 }
 
 // SHOW MEDIA
 function showMedia(){
-    let item=media[index];
+    const item=media[index];
     let content="";
 
     if(item.type==="image"){
@@ -122,7 +118,7 @@ function next(){
     }
 }
 
-// FLOATING HEARTS
+// HEARTS
 function spawnHearts(){
     setInterval(()=>{
         const heart=document.createElement("div");
@@ -131,12 +127,11 @@ function spawnHearts(){
         heart.style.left=Math.random()*100+"vw";
         heart.style.animationDuration=(3+Math.random()*3)+"s";
         document.body.appendChild(heart);
-
         setTimeout(()=>heart.remove(),6000);
     },300);
 }
 
-// QUESTION SCREEN
+// QUESTION
 function question(){
 
     document.getElementById("app").innerHTML=`
@@ -168,7 +163,7 @@ function dodgeNo(){
         "Still no?",
         "You’re persistent!",
         "This button disagrees",
-        "Try again 😂", 
+        "Try again 😂",
         "Destiny says YES",
         "Come on now…",
         "You know the answer 😉",
@@ -179,14 +174,12 @@ function dodgeNo(){
         "Just tap YES already ❤️",
         "I'll keep running!",
         "You can’t catch me!"
-
     ];
 
-    if(noClicks<responses.length){
+    if(noClicks < responses.length){
         btn.innerText=responses[noClicks];
     }
 
-    // Move NO button
     const maxX=window.innerWidth-btn.offsetWidth;
     const maxY=window.innerHeight-btn.offsetHeight;
 
@@ -194,12 +187,11 @@ function dodgeNo(){
     btn.style.left=Math.random()*maxX+"px";
     btn.style.top=Math.random()*maxY+"px";
 
-    // Grow YES button
     yesSize+=6;
     yesBtn.style.fontSize=yesSize+"px";
 }
 
-// YES CLICK
+// YES
 function yes(){
 
     music.pause();
