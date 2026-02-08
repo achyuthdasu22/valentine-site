@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<Harika>For You ❤️</Harika>
+
+<style>
+body{
+  text-align:center;
+  font-family:Arial;
+  background:#ffe6f0;
+}
+
+button{
+  padding:15px 25px;
+  font-size:20px;
+  margin:15px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Hey ❤️</h1>
+<p>I made something just for you...</p>
+
+<button onclick="start()">Start</button>
+
+<script>
+
+function start(){
+document.body.innerHTML = `
+<h1>Some of my favourite memories</h1>
+<img src="photo1.jpg" width="300"><br><br>
+<img src="photo2.jpg" width="300"><br><br>
+<button onclick="question()">Next</button>
+`;
+}
+
+function question(){
+document.body.innerHTML = `
+<h1>Will you be my Valentine? ❤️</h1>
+<button onclick="yes()">Yes</button>
+<button id="noBtn" onmouseover="move()">No</button>
+`;
+}
+
+function yes(){
+document.body.innerHTML = "<h1>You just made me the happiest person ❤️</h1>";
+}
+
+function move(){
+let b=document.getElementById("noBtn");
+b.style.position="absolute";
+b.style.left=Math.random()*80+"%";
+b.style.top=Math.random()*80+"%";
+}
+
+</script>
+
+</body>
+</html>
