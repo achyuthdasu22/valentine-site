@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>For You ❤️</title>
 
 <style>
 
-/* ===== Animated Gradient Background ===== */
+/* Animated Gradient Background */
 
 body{
     margin:0;
@@ -26,7 +25,7 @@ body{
     100%{background-position:0% 50%;}
 }
 
-/* Floating background hearts */
+/* Floating Hearts */
 
 .bgHeart{
     position:fixed;
@@ -40,7 +39,7 @@ body{
     to{ transform:translateY(-10vh); }
 }
 
-/* Fade transitions */
+/* Fade container */
 
 .container{
     padding:25px;
@@ -69,7 +68,7 @@ button:hover{
     box-shadow:0 6px 16px rgba(0,0,0,0.2);
 }
 
-/* Media styling */
+/* Media */
 
 img, video{
     max-width:90%;
@@ -98,8 +97,7 @@ img, video{
 
 <script>
 
-/* ===== Floating Hearts ===== */
-
+/* Floating background hearts */
 function createBackgroundHearts(){
     for(let i=0;i<25;i++){
         const h=document.createElement("div");
@@ -113,7 +111,7 @@ function createBackgroundHearts(){
 }
 createBackgroundHearts();
 
-/* ===== Media ===== */
+/* Media */
 
 const media=[
   {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
@@ -128,7 +126,7 @@ let music;
 let noClicks=0;
 let yesScale=1;
 
-/* ===== Start ===== */
+/* Start */
 
 function start(){
     music=new Audio("music.mp3");
@@ -137,16 +135,16 @@ function start(){
     showMedia();
 }
 
-/* ===== Show Media ===== */
+/* Show media */
 
 function showMedia(){
     const item=media[index];
 
     const content=item.type==="image"
-      ? `<img src="${item.src}">`
-      : `<video controls playsinline autoplay>
-           <source src="${item.src}" type="video/mp4">
-         </video>`;
+        ? `<img src="${item.src}">`
+        : `<video controls playsinline autoplay>
+             <source src="${item.src}" type="video/mp4">
+           </video>`;
 
     document.getElementById("app").innerHTML=`
         ${content}
@@ -155,7 +153,7 @@ function showMedia(){
     `;
 }
 
-/* ===== Next ===== */
+/* Next */
 
 function next(){
     index++;
@@ -166,18 +164,18 @@ function next(){
     }
 }
 
-/* ===== Question ===== */
+/* Question screen (GIF2) */
 
 function question(){
     document.getElementById("app").innerHTML=`
-        <img src="gif1.gif">
+        <img src="gif2.gif">
         <h1>Will you be my Valentine? ❤️</h1>
         <button id="yesBtn" onclick="yes()">Yes</button>
         <button id="noBtn" onclick="dodgeNo()">No</button>
     `;
 }
 
-/* ===== No Button ===== */
+/* NO button behavior */
 
 function dodgeNo(){
 
@@ -193,11 +191,10 @@ function dodgeNo(){
         "Error 404: No not found","Nice try 😄","Just tap YES ❤️"
     ];
 
-    if(noClicks<responses.length){
-        btn.innerText=responses[noClicks];
+    if(noClicks < responses.length){
+        btn.innerText = responses[noClicks];
     }
 
-    /* Move NO button */
     const maxX=window.innerWidth-btn.offsetWidth;
     const maxY=window.innerHeight-btn.offsetHeight;
 
@@ -205,25 +202,31 @@ function dodgeNo(){
     btn.style.left=Math.random()*maxX+"px";
     btn.style.top=Math.random()*maxY+"px";
 
-    /* MASSIVE YES growth */
-    yesScale *= 1.7;     // ← MUCH stronger scaling
+    /* YES grows 3x */
+    yesScale *= 3;
     yesBtn.style.transform=`scale(${yesScale})`;
 }
 
-/* ===== YES ===== */
+/* YES click (GIF1) */
 
 function yes(){
+
     music.pause();
 
-    confetti({particleCount:300, spread:130, origin:{y:0.6}});
+    confetti({
+        particleCount:300,
+        spread:130,
+        origin:{y:0.6}
+    });
 
     document.getElementById("app").innerHTML=`
-        <img src="gif2.gif">
+        <img src="gif1.gif">
         <h1>You just made me the happiest person ❤️</h1>
         <p>I can't wait for our date 🙂</p>
     `;
 }
 
 </script>
+
 </body>
 </html>
