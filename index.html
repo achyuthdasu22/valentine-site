@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>For You ❤️</title>
 
 <style>
 body{
     margin:0;
     text-align:center;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial;
     background:#ffe6f0;
+    overflow-x:hidden;
 }
 
 .container{
@@ -39,12 +39,24 @@ img, video{
     margin-top:15px;
 }
 
-#noBtn{
-    transition:left 0.15s, top 0.15s;
+/* Floating hearts animation */
+
+.heart{
+    position:fixed;
+    bottom:-20px;
+    font-size:20px;
+    animation:floatUp linear forwards;
 }
+
+@keyframes floatUp{
+    to{
+        transform:translateY(-110vh);
+        opacity:0;
+    }
+}
+
 </style>
 
-<!-- Confetti Library -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 </head>
@@ -58,81 +70,94 @@ img, video{
 
 <script>
 
-// ================= MEDIA DATA =================
-// EDIT ONLY CAPTIONS IF YOU WANT
-
+// MEDIA
 const media = [
   {type:"image", src:"photo1.jpg", caption:"Our very first photo!"},
   {type:"image", src:"photo2.jpg", caption:"The day we kissed for the first time!"},
-  {type:"video", src:"video1.mp4", caption:"I love when you yap!"},
+  {type:"video", src:"video1.mp4", caption:"first time you held my hand!"},
   {type:"image", src:"photo3.jpg", caption:"My favourite photo of yours lol!"},
-  {type:"video", src:"video2.mp4", caption:"First time we ever held hands and walked!"},
-  {type:"image", src:"photo4.jpg", caption:"First temple visit together! Also gundu me 😄"}
+  {type:"image", src:"photo4.jpg", caption:"First temple visit together!"}
 ];
 
-let index = 0;
+let index=0;
 let music;
-let noClicks = 0;
+let noClicks=0;
+let yesSize=18;
 
-// ================= START =================
-
+// START
 function start(){
-    music = new Audio("music.mp3");
-    music.loop = true;
-    music.play();   // iPhone allowed (user interaction)
+    music=new Audio("music.mp3");
+    music.loop=true;
+    music.play();
     showMedia();
 }
 
-// ================= SHOW MEDIA =================
-
+// SHOW MEDIA
 function showMedia(){
-    let item = media[index];
-    let content = "";
+    let item=media[index];
+    let content="";
 
-    if(item.type === "image"){
-        content = `<img src="${item.src}">`;
-    } else {
-        content = `
-            <video controls playsinline autoplay>
-                <source src="${item.src}" type="video/mp4">
-            </video>`;
+    if(item.type==="image"){
+        content=`<img src="${item.src}">`;
+    }else{
+        content=`<video controls playsinline autoplay>
+                   <source src="${item.src}" type="video/mp4">
+                 </video>`;
     }
 
-    document.getElementById("app").innerHTML = `
+    document.getElementById("app").innerHTML=`
         ${content}
         <div class="caption">${item.caption}</div>
         <button onclick="next()">Next ❤️</button>
     `;
 }
 
-// ================= NEXT =================
-
+// NEXT
 function next(){
     index++;
-    if(index < media.length){
+    if(index<media.length){
         showMedia();
-    } else {
+    }else{
         question();
     }
 }
 
-// ================= QUESTION =================
+// FLOATING HEARTS
+function spawnHearts(){
+    setInterval(()=>{
+        const heart=document.createElement("div");
+        heart.className="heart";
+        heart.innerHTML="❤️";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.animationDuration=(3+Math.random()*3)+"s";
+        document.body.appendChild(heart);
 
-function question(){
-    document.getElementById("app").innerHTML = `
-        <h1>Will you be my Valentine? ❤️</h1>
-        <button onclick="yes()">Yes</button>
-        <button id="noBtn" onclick="dodgeNo()">No</button>
-    `;
+        setTimeout(()=>heart.remove(),6000);
+    },300);
 }
 
-// ================= MOBILE SAFE DODGE =================
+// QUESTION SCREEN
+function question(){
 
+    document.getElementById("app").innerHTML=`
+        <img src="gif1.gif">
+        <h1>Will you be my Valentine? ❤️</h1>
+        <button id="yesBtn" onclick="yes()">Yes</button>
+        <button id="noBtn" onclick="dodgeNo()">No</button>
+    `;
+
+    spawnHearts();
+}
+
+// NO CLICK
 function dodgeNo(){
 
-    const btn = document.getElementById("noBtn");
+    noClicks++;
 
-    const responses = [
+    const btn=document.getElementById("noBtn");
+    const yesBtn=document.getElementById("yesBtn");
+
+    const responses=[
         "No",
         "Are you sure?",
         "Really sure?",
@@ -141,32 +166,36 @@ function dodgeNo(){
         "Just press Yes ❤️"
     ];
 
-    if(noClicks < responses.length-1){
-        noClicks++;
-        btn.innerText = responses[noClicks];
+    if(noClicks<responses.length){
+        btn.innerText=responses[noClicks];
     }
 
-    const maxX = window.innerWidth - btn.offsetWidth;
-    const maxY = window.innerHeight - btn.offsetHeight;
+    // Move NO button
+    const maxX=window.innerWidth-btn.offsetWidth;
+    const maxY=window.innerHeight-btn.offsetHeight;
 
-    btn.style.position = "fixed";
-    btn.style.left = Math.random()*maxX + "px";
-    btn.style.top = Math.random()*maxY + "px";
+    btn.style.position="fixed";
+    btn.style.left=Math.random()*maxX+"px";
+    btn.style.top=Math.random()*maxY+"px";
+
+    // Grow YES button
+    yesSize+=6;
+    yesBtn.style.fontSize=yesSize+"px";
 }
 
-// ================= YES =================
-
+// YES CLICK
 function yes(){
+
     music.pause();
 
-    // Confetti burst
     confetti({
-        particleCount: 200,
-        spread: 100,
-        origin: { y: 0.6 }
+        particleCount:250,
+        spread:120,
+        origin:{y:0.6}
     });
 
-    document.getElementById("app").innerHTML = `
+    document.getElementById("app").innerHTML=`
+        <img src="gif2.gif">
         <h1>You just made me the happiest person ❤️</h1>
         <p>I can't wait for our date 🙂</p>
     `;
